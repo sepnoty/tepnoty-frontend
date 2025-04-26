@@ -4,15 +4,33 @@ import PhoneLogin from './pages/PhoneLogin';
 import OtpVerification from './pages/OtpVerification';
 import HomeDashboard from './pages/HomeDashboard';
 
+// Profile Setup Pages
+import NameInput from './pages/profile/NameInput';
+import DobInput from './pages/profile/DobInput';
+import GenderInput from './pages/profile/GenderInput';
+import EmailInput from './pages/profile/EmailInput';
+import BioInput from './pages/profile/BioInput';
+import ProfilePicInput from './pages/profile/ProfilePicInput';
+import ProfileSummary from './pages/profile/ProfileSummary';
+
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Main App Flow */}
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<PhoneLogin />} />
         <Route path="/otp" element={<OtpVerification />} />
         <Route path="/home" element={<HomeDashboard />} />
-        {/* more routes later */}
+
+        {/* Profile Setup Flow */}
+        <Route path="/profile/name" element={<NameInput />} />
+        <Route path="/profile/dob" element={<DobInput />} />
+        <Route path="/profile/gender" element={<GenderInput />} />
+        <Route path="/profile/email" element={<EmailInput />} />
+        <Route path="/profile/bio" element={<BioInput />} />
+        <Route path="/profile/profile-pic" element={<ProfilePicInput />} />
+        <Route path="/profile/summary" element={<ProfileSummary />} />
       </Routes>
     </Router>
   );
