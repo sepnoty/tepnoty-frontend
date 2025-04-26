@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function ProfileSummary() {
   const [profileData, setProfileData] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch all saved profile data from localStorage
     const name = localStorage.getItem("tepnoty_name");
     const dob = localStorage.getItem("tepnoty_dob");
     const gender = localStorage.getItem("tepnoty_gender");
@@ -17,9 +18,23 @@ function ProfileSummary() {
     setProfileData({ name, dob, gender, email, bio, profilePic });
   }, []);
 
-  const handleFinish = () => {
-    // Later you can send this data to backend database here
-    navigate("/home");
+  const handleFinish = async () => {
+    try {
+      setLoading(true);
+
+      // POST request to backend
+      await axios.post('http://localhost:5000/api/saveProfile', profileData);
+
+      console.log("Profile saved to backend ✅");
+
+      // After successful save → Navigate to Home
+      navigate("/home");
+    } catch (error) {
+      console.error("Failed to save profile:", error);
+      alert("Failed to save profile. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,9 +53,10 @@ function ProfileSummary() {
 
         <button
           onClick={handleFinish}
+          disabled={loading}
           className="w-full bg-green-600 hover:bg-green-700 transition-all text-white font-semibold py-2 rounded mt-8"
         >
-          Finish ➔ Go Home
+          {loading ? "Saving..." : "Finish ➔ Go Home"}
         </button>
       </div>
     </div>

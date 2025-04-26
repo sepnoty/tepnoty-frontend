@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Main Pages
 import SplashScreen from './pages/SplashScreen';
 import PhoneLogin from './pages/PhoneLogin';
 import OtpVerification from './pages/OtpVerification';
@@ -17,13 +19,16 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Main App Flow */}
+
+        {/* Splash + Login Flow */}
         <Route path="/" element={<SplashScreen />} />
         <Route path="/login" element={<PhoneLogin />} />
         <Route path="/otp" element={<OtpVerification />} />
+
+        {/* Home Dashboard */}
         <Route path="/home" element={<HomeDashboard />} />
 
-        {/* Profile Setup Flow */}
+        {/* Profile Setup Flow (Step-by-Step Pages) */}
         <Route path="/profile/name" element={<NameInput />} />
         <Route path="/profile/dob" element={<DobInput />} />
         <Route path="/profile/gender" element={<GenderInput />} />
@@ -31,6 +36,10 @@ function App() {
         <Route path="/profile/bio" element={<BioInput />} />
         <Route path="/profile/profile-pic" element={<ProfilePicInput />} />
         <Route path="/profile/summary" element={<ProfileSummary />} />
+
+        {/* Settings Page - (Coming soon if needed) */}
+        {/* <Route path="/settings" element={<Settings />} /> */}
+
       </Routes>
     </Router>
   );
