@@ -1,16 +1,44 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 function OtpVerification() {
   const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const phoneNumber = location.state?.phoneNumber; // Passed from PhoneLogin
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
-    if (otp === "1234") {
-      navigate("/home");
-    } else {
+
+    if (otp !== "1234") {
       alert("Invalid OTP. Try 1234");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      console.log("OTP Verified ✅");
+
+      // Check if user already exists by phoneNumber
+      const res = await axios.get(`http://localhost:5000/api/checkProfile/${phoneNumber}`);
+
+      if (res.data.exists) {
+        console.log("Existing user, redirecting to Home 🏡");
+        localStorage.setItem("tepnoty_phoneNumber", phoneNumber);
+        navigate("/home");
+      } else {
+        console.log("New user, redirecting to Profile Setup 📝");
+        localStorage.setItem("tepnoty_phoneNumber", phoneNumber);
+        navigate("/profile/name");
+      }
+    } catch (error) {
+      console.error("Error during OTP verification or phone number check:", error);
+      alert("Something went wrong, please try again!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,9 +58,10 @@ function OtpVerification() {
           />
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-purple-600 hover:bg-purple-700 transition-all text-white font-semibold py-2 rounded"
           >
-            Verify & Continue
+            {loading ? "Verifying..." : "Verify & Continue"}
           </button>
         </form>
       </div>

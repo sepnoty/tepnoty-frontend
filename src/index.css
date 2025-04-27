@@ -4,7 +4,27 @@
 
 /* Optional: Custom animations */
 @layer utilities {
+  /* Fade In Animation */
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  /* Hover Bounce Animation */
+  .hover-bounce {
+    transition: all 0.2s ease;
+  }
+
+  .hover-bounce:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Optional: Define Keyframes if you want for fadeIn (already safe in Tailwind by default) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

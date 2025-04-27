@@ -8,29 +8,39 @@ function ProfileSummary() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const name = localStorage.getItem("tepnoty_name");
-    const dob = localStorage.getItem("tepnoty_dob");
-    const gender = localStorage.getItem("tepnoty_gender");
-    const email = localStorage.getItem("tepnoty_email");
-    const bio = localStorage.getItem("tepnoty_bio");
-    const profilePic = localStorage.getItem("tepnoty_profile_pic");
+    const fetchProfileData = () => {
+      const name = localStorage.getItem("tepnoty_name") || "";
+      const dob = localStorage.getItem("tepnoty_dob") || "";
+      const gender = localStorage.getItem("tepnoty_gender") || "";
+      const email = localStorage.getItem("tepnoty_email") || "";
+      const bio = localStorage.getItem("tepnoty_bio") || "";
+      const profilePic = localStorage.getItem("tepnoty_profile_pic") || "";
+      const phoneNumber = localStorage.getItem("phoneNumber") || ""; // Fetch phone number
 
-    setProfileData({ name, dob, gender, email, bio, profilePic });
+      setProfileData({ name, dob, gender, email, bio, profilePic, phoneNumber });
+    };
+
+    fetchProfileData();
   }, []);
 
   const handleFinish = async () => {
     try {
       setLoading(true);
 
-      // POST request to backend
-      await axios.post('http://localhost:5000/api/saveProfile', profileData);
+      // POST profile data to backend
+      const response = await axios.post('http://localhost:5000/api/saveProfile', profileData);
 
-      console.log("Profile saved to backend ✅");
+      if (response.status === 201) {
+        console.log("✅ Profile saved successfully to backend!");
 
-      // After successful save → Navigate to Home
-      navigate("/home");
+        // After successful save → Navigate to Home
+        navigate("/home");
+      } else {
+        console.error("⚠️ Unexpected response from server:", response);
+        alert("Something went wrong while saving profile. Please try again.");
+      }
     } catch (error) {
-      console.error("Failed to save profile:", error);
+      console.error("❌ Failed to save profile:", error);
       alert("Failed to save profile. Please try again.");
     } finally {
       setLoading(false);
@@ -49,6 +59,7 @@ function ProfileSummary() {
           <p><span className="text-white font-semibold">Email:</span> {profileData.email || "Not set"}</p>
           <p><span className="text-white font-semibold">Bio:</span> {profileData.bio || "Not set"}</p>
           <p><span className="text-white font-semibold">Profile Pic:</span> {profileData.profilePic || "Not uploaded"}</p>
+          <p><span className="text-white font-semibold">Phone Number:</span> {profileData.phoneNumber || "Not set"}</p>
         </div>
 
         <button
